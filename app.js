@@ -5,7 +5,7 @@ const getDate=require(__dirname+"/date.js");
 const ejs=require('ejs');
 const _=require("lodash");
 const { urlencoded } = require('body-parser');
-mongoose.connect("mongodb+srv://admin-salehin:lagtonay@cluster0.zobm7.mongodb.net/todolist",{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
+mongoose.connect("mongodb://localhost:27017/todolist",{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
 const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
@@ -57,10 +57,10 @@ app.get("/",function(req,res){
             
             
         }
-    })
+    });
    
  
-})
+});
 app.get("/:listName",function(req,res){
     const listName=_.capitalize(req.params.listName);
     List.findOne({name:listName},function(err,foundList){
@@ -69,10 +69,9 @@ app.get("/:listName",function(req,res){
                 const list = new List({
                     name:listName,
                     items:defaultItems
-                })
+                });
                 list.save();
-                res.redirect("/"+listName);
-                
+                res.redirect("/"+listName);     
             }
             else{
                 res.render("index",{listTitle:listName,newTasks:foundList.items});
@@ -80,10 +79,10 @@ app.get("/:listName",function(req,res){
             
         }
         
-    })
+    });
    
 
-})
+});
 
 app.post("/",function(req,res){
     const taskName= req.body.task;
